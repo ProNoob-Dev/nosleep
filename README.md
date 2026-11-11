@@ -34,19 +34,47 @@ Scroll Lock does nothing in almost every app, so toggling it is invisible. It re
 
 ## Quick start
 
+**Fork it first** — that's the point. Hit **Fork** (top-right), then clone *your* fork:
+
 ```powershell
-git clone https://github.com/ProNoob-Dev/nosleep.git
+git clone https://github.com/<your-username>/nosleep.git
 cd nosleep
 .\nosleep.ps1
 ```
 
-Or just download `nosleep.ps1` and run it. To change the heartbeat interval:
-
-```powershell
-.\nosleep.ps1 -sleep 30
-```
+Prefer a fresh copy with no fork link? Hit **Use this template** instead. Or just download `nosleep.ps1` and run it.
 
 Press `Ctrl+C` to stop.
+
+## Modes
+
+One script, three presets. Pick the one that fits what you're doing:
+
+| Mode | Interval | What changes | Run it |
+|---|---|---|---|
+| **Teams** (default) | 60s | Full dashboard — for keeping Teams Available | `.\nosleep.ps1` |
+| **Presentation** | 240s | Quiet — one line per cycle, no screen clearing, stays out of the way on a screen share | `.\nosleep.ps1 -mode Presentation` |
+| **Focus** | 45s | Full dashboard + a focus-session timer | `.\nosleep.ps1 -mode Focus` |
+
+An explicit `-sleep` always overrides the mode's interval:
+
+```powershell
+.\nosleep.ps1 -mode Presentation -sleep 120
+```
+
+### Make it yours — add your own mode
+
+That's what the fork is for. One line in `nosleep.ps1`, in the `$modes` table:
+
+```powershell
+DeepWork = @{ Interval = 90; Quiet = $false }
+```
+
+Then run it:
+
+```powershell
+.\nosleep.ps1 -mode DeepWork
+```
 
 ## How it works
 
@@ -61,7 +89,8 @@ Each cycle:
 
 | Parameter | Default | Description |
 |---|---|---|
-| `-sleep` | `60` | Cycle length in seconds (the countdown bar steps at `sleep * 10` ms per percent) |
+| `-mode` | `Teams` | Preset: `Teams`, `Presentation`, or `Focus` — sets the interval and dashboard style |
+| `-sleep` | mode's interval | Cycle length in seconds (the countdown bar steps at `sleep * 10` ms per percent); overrides the mode's interval |
 
 ## Requirements
 

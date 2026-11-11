@@ -1,4 +1,21 @@
-param($sleep = 60)
+param(
+    [ValidateSet("Teams", "Presentation", "Focus")]
+    [string]$mode = "Teams",
+    $sleep = 60
+)
+
+# Modes — one line per preset. Fork this repo and add your own here:
+#   DeepWork = @{ Interval = 90; Quiet = $false }
+# then run: .\nosleep.ps1 -mode DeepWork
+$modes = @{
+    Teams        = @{ Interval = 60;  Quiet = $false }
+    Presentation = @{ Interval = 240; Quiet = $true  }
+    Focus        = @{ Interval = 45;  Quiet = $false }
+}
+
+# An explicit -sleep always wins over the mode's interval.
+if (-not $PSBoundParameters.ContainsKey('sleep')) { $sleep = $modes[$mode].Interval }
+$quiet = $modes[$mode].Quiet
 
 Clear-Host
 
@@ -28,8 +45,26 @@ function Draw-Bar($percent,$color)
     Write-Host "] $percent%" -ForegroundColor White
 }
 
+function Send-Heartbeat
+{
+    $WShell.SendKeys("{SCROLLLOCK}")
+    Start-Sleep -Milliseconds 200
+    $WShell.SendKeys("{SCROLLLOCK}")
+}
+
 while ($true)
 {
+
+if ($quiet)
+{
+    # Presentation mode: one quiet line per cycle, no screen clearing,
+    # so it stays out of the way while you share your screen.
+    Send-Heartbeat
+    Write-Host "NoSleep [$mode] — cycle $cycle — uptime $($stopwatch.Elapsed.ToString('hh\:mm\:ss')) — next beat in ${sleep}s" -ForegroundColor DarkGray
+    $cycle++
+    Start-Sleep -Seconds $sleep
+    continue
+}
 
 Clear-Host
 
@@ -39,14 +74,17 @@ Write-Host "╚═════════════════════�
 
 Write-Host ""
 Write-Host "STATUS  : ACTIVE" -ForegroundColor Green
+Write-Host "MODE    : $mode" -ForegroundColor White
 Write-Host "UPTIME  : $($stopwatch.Elapsed.ToString('dd\.hh\:mm\:ss'))" -ForegroundColor Magenta
+if ($mode -eq "Focus")
+{
+    Write-Host "FOCUS   : $($stopwatch.Elapsed.ToString('hh\:mm\:ss')) in the zone" -ForegroundColor Cyan
+}
 Write-Host "CYCLES  : $cycle" -ForegroundColor Yellow
 Write-Host ""
 
 Write-Host "Heartbeat Signal" -ForegroundColor Red
-$WShell.SendKeys("{SCROLLLOCK}")
-Start-Sleep -Milliseconds 200
-$WShell.SendKeys("{SCROLLLOCK}")
+Send-Heartbeat
 
 Write-Host ""
 Write-Host "Signal Countdown:" -ForegroundColor Gray
