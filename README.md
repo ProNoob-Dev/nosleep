@@ -11,6 +11,20 @@ NoSleep keeps your Windows session — and your Teams status — **Available** w
 
 ![NoSleep live dashboard](docs/assets/demo.svg)
 
+## Not technical? Start here — 2 minutes, nothing to type
+
+1. Click the green **Code** button at the top of this page, then **Download ZIP**.
+2. Open the downloaded ZIP and click **Extract All**.
+3. Open the extracted folder and **double-click the launcher you want**:
+   - `Start-NoSleep.bat` — for Teams (normal use)
+   - `Start-NoSleep-Presentation.bat` — for screen shares
+   - `Start-NoSleep-Focus.bat` — with a focus timer
+   - If Windows says "protected your PC", click **More info → Run anyway**. If Windows blocks the file, right-click the ZIP → Properties → tick **Unblock** → OK, then extract again.
+4. A black window opens with the dashboard. **Leave it open** — while it's open, your system stays awake and your Teams stays Available.
+5. To stop, just close the window.
+
+That's it. No installs, no accounts, no commands. Keep all the files together in the folder.
+
 ## The tricks everyone uses (and why they suck)
 
 | Trick | The problem |
@@ -32,7 +46,7 @@ NoSleep keeps your Windows session — and your Teams status — **Available** w
 
 Scroll Lock does nothing in almost every app, so toggling it is invisible. It registers as activity with Windows without typing anything, moving anything, or touching any window. That's the whole trick — there is no trick.
 
-## Quick start
+## Quick start (for developers)
 
 **Fork it first** — that's the point. Hit **Fork** (top-right), then clone *your* fork:
 
@@ -50,11 +64,11 @@ Press `Ctrl+C` to stop.
 
 One script, three presets. Pick the one that fits what you're doing:
 
-| Mode | Interval | What changes | Run it |
+| Mode | Interval | What changes | Run it / double-click |
 |---|---|---|---|
-| **Teams** (default) | 60s | Full dashboard — for keeping Teams Available | `.\nosleep.ps1` |
-| **Presentation** | 240s | Quiet — one line per cycle, no screen clearing, stays out of the way on a screen share | `.\nosleep.ps1 -mode Presentation` |
-| **Focus** | 45s | Full dashboard + a focus-session timer | `.\nosleep.ps1 -mode Focus` |
+| **Teams** (default) | 60s | Full dashboard — for keeping Teams Available | `.\nosleep.ps1` / `Start-NoSleep.bat` |
+| **Presentation** | 240s | Quiet — one line per cycle, no screen clearing, stays out of the way on a screen share | `.\nosleep.ps1 -mode Presentation` / `Start-NoSleep-Presentation.bat` |
+| **Focus** | 45s | Full dashboard + a focus-session timer | `.\nosleep.ps1 -mode Focus` / `Start-NoSleep-Focus.bat` |
 
 An explicit `-sleep` always overrides the mode's interval:
 
